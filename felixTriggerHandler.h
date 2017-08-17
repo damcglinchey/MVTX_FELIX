@@ -3,17 +3,25 @@
 
 #include <TriggerHandler.h>
 
+#include <flxcard/FlxCard.h>
+
 class felixTriggerHandler : public TriggerHandler
 {
 public:
-    felixTriggerHandler();
+    felixTriggerHandler(FlxCard* flx, const int deadtime = 0); //deadtime > 0 stands for polling based trigger
     ~felixTriggerHandler();
 
     //! actual worker routine
     int wait_for_trigger(const int moreinfo = 0);
 
 protected:
-    int _highest_fd;
+    FlxCard* _flx;
+
+    //! flag indicating trigger/polling
+    bool _extTrigger;
+
+    //! fixed deadtime
+    int _deadtime;
 };
 
 #endif
