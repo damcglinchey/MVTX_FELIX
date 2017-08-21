@@ -13,6 +13,8 @@
 #include <flxcard/FlxCard.h>
 #include "flxdefs.h"
 
+#define IDFELIXV1 98
+
 class daq_device_felix : public daq_device
 {
 public:
@@ -37,7 +39,7 @@ public:
     //@{
     int init();   //! called at the start of run
     int endrun(); //! called at the end of run
-    int rearm(const int etype); //! don't know what it does
+    int rearm(const int etype); //! called before releasing busy at each event
     //@}
 
 private:

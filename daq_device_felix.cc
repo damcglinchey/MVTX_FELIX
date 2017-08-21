@@ -67,9 +67,10 @@ int daq_device_felix::put_data(const int etype, int* addr, const int length)
     int len = 0;
     sevt = (subevtdata_ptr)addr;
 
-    sevt->sub_length = 0;
+    sevt->sub_length = SEVTHEADERLENGTH;
     sevt->sub_id = _subEvtID;
-    sevt->sub_decoding = 0;
+    sevt->sub_decoding = IDFELIXV1;
+    sevt->sub_type = 4;
     sevt->reserved[0] = 0;
     sevt->reserved[1] = 0;
 
@@ -83,14 +84,14 @@ int daq_device_felix::put_data(const int etype, int* addr, const int length)
     if(_currAddr > _prevAddr)
     {
         len = _currAddr - _prevAddr;
-        sevt->sub_length = len;
+        sevt->sub_length += len;
         memcpy(data, _prevAddr, len);
         data += len;
     }
     else //wrap arround
     {
         len = _endAddr - _prevAddr;
-        sevt->sub_length = len;
+        sevt->sub_length += len;
         memcpy(data, _prevAddr, len);
         data += len;
 
@@ -105,6 +106,9 @@ int daq_device_felix::put_data(const int etype, int* addr, const int length)
     const unsigned int eop_marker = 0xf000f000;
     memcpy(data, &eop_marker, 4);
 
+    //packet padding to make packets aligned
+    sevt->sub_padding = sevt->sub_length % 4;
+    sevt->sub_length += sevt->sub_padding;
     return sevt->sub_length;
 }
 
