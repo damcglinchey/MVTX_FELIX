@@ -4,6 +4,7 @@
 #include <TriggerHandler.h>
 
 #include <flxcard/FlxCard.h>
+#include "flxdefs.h"
 
 class felixTriggerHandler : public TriggerHandler
 {

@@ -8,7 +8,7 @@ int felix_plugin::create_device(deviceblock* db)
 {
     if(db->npar != 7) return -1;  //all 6 parameters need to be explicitly set
 
-    int eventtype = boost::lexical_cast<int>(db->argv1)
+    int eventtype = boost::lexical_cast<int>(db->argv1);
     int subid     = boost::lexical_cast<int>(db->argv2);
     int card_nr   = boost::lexical_cast<int>(db->argv3);
     int64_t buffer_size = boost::lexical_cast<int64_t>(db->argv4);
@@ -21,7 +21,7 @@ int felix_plugin::create_device(deviceblock* db)
     return 0;
 }
 
-void felix_plugin::identify(std::ostream& os, const int flag)
+void felix_plugin::identify(std::ostream& os, const int flag) const
 {
     if(flag <= 2)
     {

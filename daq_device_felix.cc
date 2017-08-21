@@ -1,5 +1,11 @@
 #include "daq_device_felix.h"
 
+#include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+
 daq_device_felix::daq_device_felix(const int eventtype,
                                    const int subeventid,
                                    const int card_nr,
@@ -59,7 +65,7 @@ int daq_device_felix::put_data(const int etype, int* addr, const int length)
     if(etype != _eventType) return 0;  //not our id
 
     int len = 0;
-    sevt = (subevtdata_ptr)adr;
+    sevt = (subevtdata_ptr)addr;
 
     sevt->sub_length = 0;
     sevt->sub_id = _subEvtID;
@@ -124,7 +130,7 @@ int daq_device_felix::init()
     if(_dataBuffer) this->dmaStart(_cmemPhysAddr, _buffer_size, _dma_index);
 
     _isRunning = true;
-    _currentAddr = _startAddr;
+    _currAddr = _startAddr;
     _prevAddr = _startAddr;
     return 0;
 }

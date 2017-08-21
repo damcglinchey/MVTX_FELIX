@@ -7,10 +7,11 @@
 #include <boost/lexical_cast.hpp>
 
 #include <daq_device.h>
-#include <felixTriggerHandler.h>
+#include "felixTriggerHandler.h"
 
 #include <cmem_rcc/cmem_rcc.h>
 #include <flxcard/FlxCard.h>
+#include "flxdefs.h"
 
 class daq_device_felix : public daq_device
 {
@@ -27,7 +28,7 @@ public:
     void identify(std::ostream& os = std::cout) const;
 
     //! Get maximum event length
-    int max_length(const etype) const;
+    int max_length(const int etype) const;
 
     //! core function to fetch data and pack with envelop info
     int put_data(const int etype, int* addr, const int length);
@@ -93,7 +94,7 @@ protected:
 
     cmem_rcc_t _cmemDescriptor;
     uint64_t   _cmemPhysAddr;
-    uint64_t   _cmemCirtAddr;
+    uint64_t   _cmemVirtAddr;
     int        _cmemHandle;
 
     int                        _dmaIndex;

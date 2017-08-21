@@ -2,7 +2,7 @@
 
 #include <unistd.h>
 
-felixTriggerHandler::felixTriggerHandler(FlxCard* flx, const int deadtime = 0);
+felixTriggerHandler::felixTriggerHandler(FlxCard* flx, const int deadtime)
 {
     _flx = flx;
 
