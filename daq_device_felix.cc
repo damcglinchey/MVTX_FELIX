@@ -167,6 +167,12 @@ void daq_device_felix::identify(std::ostream& os) const
     os << std::endl;
 }
 
+int daq_device_felix::max_length(const int etype) const
+{
+    if(etype != _eventType) return 0;
+    return 10000000;
+}
+
 //------------------- Below are private functions directly taken from fdaq code ------------------
 void daq_device_felix::setFanOut()
 {
