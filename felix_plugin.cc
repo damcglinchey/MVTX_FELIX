@@ -14,12 +14,12 @@ int felix_plugin::create_device(deviceblock* db)
     int card_nr   = boost::lexical_cast<int>(db->argv3);
     int64_t buffer_size = boost::lexical_cast<int64_t>(db->argv4);
     int dma_index = boost::lexical_cast<int>(db->argv5);
-    int deadtime  = boost::lexical_cast<int>(db->argv6);
+    int flag      = boost::lexical_cast<int>(db->argv6);
 
     //Convert buffersize from MB to B
     buffer_size = buffer_size*1024*1024;
 
-    daq_device* x = new daq_device_felix(eventtype, subid, card_nr, buffer_size, dma_index, deadtime);
+    daq_device* x = new daq_device_felix(eventtype, subid, card_nr, buffer_size, dma_index, flag);
     add_readoutdevice(x);
 
     return 0;
