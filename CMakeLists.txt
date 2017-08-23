@@ -1,5 +1,8 @@
 cmake_minimum_required(VERSION 3.4.3)
 
+# list of felix software dependencies
+set(felix_deps FlxCard drivers_rcc regmap)
+
 # Find all the packages, there should be a better way -- right now there is no flexibility at all
 ## find RCDAQ
 if(EXISTS $ENV{RCDAQ_ROOT})
@@ -12,10 +15,6 @@ endif()
 ## find felix related software
 if(EXISTS $ENV{FELIX_ROOT})
     message("-- Detecting FELIX installation at $ENV{FELIX_ROOT}.")
-    include_directories($ENV{FELIX_ROOT}/flxcard)
-    include_directories($ENV{FELIX_ROOT}/drivers_rcc)
-    include_directories($ENV{FELIX_ROOT}/regmap)
-
 else()
     message(FATAL_ERROR "-- Cannot find FELIX.")
 endif()
@@ -33,9 +32,15 @@ else()
 endif()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive")
+set(FELIX_ARCH "x86_64-slc6-gcc62-opt")
 
 include_directories(${PROJECT_SOURCE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/*.cc)
 
 add_library(rcdaqplugin_felix SHARED ${sources})
+foreach(felix_dep ${felix_deps})
+    string(TOLOWER ${felix_dep} dep_loc)
+    include_directories($ENV{FELIX_ROOT}/${dep_loc})
+    target_link_libraries(rcdaqplugin_felix $ENV{FELIX_ROOT}/${FELIX_ARCH}/${dep_loc}/lib${felix_dep}.so)
+endforeach(felix_dep)
 install(TARGETS rcdaqplugin_felix DESTINATION "$ENV{RCDAQ_ROOT}/install/lib")

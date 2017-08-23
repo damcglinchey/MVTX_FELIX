@@ -6,6 +6,7 @@
 
 int felix_plugin::create_device(deviceblock* db)
 {
+    if(strcasecmp(db->argv0, "device_felix") != 0) return -1;
     if(db->npar != 7) return -1;  //all 6 parameters need to be explicitly set
 
     int eventtype = boost::lexical_cast<int>(db->argv1);
@@ -14,6 +15,9 @@ int felix_plugin::create_device(deviceblock* db)
     int64_t buffer_size = boost::lexical_cast<int64_t>(db->argv4);
     int dma_index = boost::lexical_cast<int>(db->argv5);
     int deadtime  = boost::lexical_cast<int>(db->argv6);
+
+    //Convert buffersize from MB to B
+    buffer_size = buffer_size*1024*1024;
 
     daq_device* x = new daq_device_felix(eventtype, subid, card_nr, buffer_size, dma_index, deadtime);
     add_readoutdevice(x);
