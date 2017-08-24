@@ -75,7 +75,7 @@ int daq_device_felix::put_data(const int etype, int* addr, const int length)
     sevt->reserved[1] = 0;
 
     //Copy data from DMA buffer
-    char* data = (char*)&sevt->data;
+    void* data = (void*)&(sevt->data);
 
     // loop or memcpy here to move data
     _currAddr = _dmaStat->current_address;
@@ -85,19 +85,19 @@ int daq_device_felix::put_data(const int etype, int* addr, const int length)
     {
         len = _currAddr - _prevAddr;
         sevt->sub_length += len;
-        memcpy(data, _prevAddr, len);
+        memcpy(data, &_dataBuffer[_prevAddr - _startAddr], len);
         data += len;
     }
     else //wrap arround
     {
         len = _endAddr - _prevAddr;
         sevt->sub_length += len;
-        memcpy(data, _prevAddr, len);
+        memcpy(data, &_dataBuffer[_prevAddr - _startAddr], len);
         data += len;
 
         len = _currAddr - _startAddr;
         sevt->sub_length += len;
-        memcpy(data, _startAddr, len);
+        memcpy(data, _dataBuffer, len);
         data += len;
     }
     _prevAddr = _currAddr;

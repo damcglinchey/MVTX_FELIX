@@ -14,6 +14,7 @@
 #include "flxdefs.h"
 
 #define IDFELIXV1 98
+#define logDebug(message) std::cout << __FUNCTION__ << " - " << __LINE__ << " : " << message << std::endl
 
 class daq_device_felix : public daq_device
 {

@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.4.3)
 
 # list of felix software dependencies
 set(felix_deps FlxCard drivers_rcc regmap)
-
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive")
 
 # Find all the packages, there should be a better way -- right now there is no flexibility at all
@@ -43,15 +42,15 @@ include_directories(${PROJECT_SOURCE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/*.cc)
 
 add_library(rcdaqplugin_felix SHARED ${sources})
-add_executable(test_felix ${PROJECT_SOURCE_DIR}/test/test_felix.cc ${sources})
+#add_executable(test_felix ${PROJECT_SOURCE_DIR}/test/test_felix.cc ${sources})
 
 # link RCDAQ libraries
-target_link_libraries(rcdaqplugin_felix rcdaq rcdaqutils)
-target_link_libraries(test_felix        rcdaq rcdaqutils)
+target_link_libraries(rcdaqplugin_felix rcdaqutils)
+#target_link_libraries(test_felix        rcdaq rcdaqutils)
 
 # link FELIX libraries
 foreach(felix_dep ${felix_deps})
     target_link_libraries(rcdaqplugin_felix ${felix_dep})
-    target_link_libraries(test_felix        ${felix_dep})
+    #target_link_libraries(test_felix        ${felix_dep})
 endforeach(felix_dep)
 install(TARGETS rcdaqplugin_felix DESTINATION "$ENV{RCDAQ_ROOT}/install/lib")
