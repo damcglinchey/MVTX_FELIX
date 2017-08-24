@@ -1,0 +1,20 @@
+export RCDAQ_ROOT=/home/liuk/currentWork/rcdaq-mvtx
+export FELIX_ROOT="/home/liuk/currentWork/felix-software"
+export FELIX_ARCH="x86_64-slc6-gcc62-opt"
+
+export PATH="$PATH:$RCDAQ_ROOT/install/bin"
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$RCDAQ_ROOT/install/lib"
+
+export PATH="$PATH:$FELIX_ROOT/$FELIX_ARCH/flxcard"
+export PATH="$PATH:$FELIX_ROOT/$FELIX_ARCH/fel"
+export PATH="$PATH:$FELIX_ROOT/$FELIX_ARCH/fdaq"
+export PATH="$PATH:$FELIX_ROOT/$FELIX_ARCH/pepo"
+export PATH="$PATH:$FELIX_ROOT/$FELIX_ARCH/elinkconfig"
+
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$FELIX_ROOT/$FELIX_ARCH/flxcard"
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$FELIX_ROOT/$FELIX_ARCH/regmap"
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$FELIX_ROOT/$FELIX_ARCH/drivers_rcc"
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$FELIX_ROOT/$FELIX_ARCH/felixbase"
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$FELIX_ROOT/$FELIX_ARCH/packetformat"
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$FELIX_ROOT/$FELIX_ARCH/fel"
+export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$FELIX_ROOT/$FELIX_ARCH/fdaq"
