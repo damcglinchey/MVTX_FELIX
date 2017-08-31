@@ -86,7 +86,7 @@ int daq_device_felix::put_data(const int etype, int* addr, const int length)
         sevt->sub_length += len;
         data += len;
     }
-    else //wrap around
+    else if(_currAddr < _prevAddr)  //wrap around
     {
         uint64_t len = transfer(data, _prevAddr, _endAddr);
         sevt->sub_length += len;
@@ -95,7 +95,7 @@ int daq_device_felix::put_data(const int etype, int* addr, const int length)
         len = transfer(data, _startAddr, _currAddr);
         sevt->sub_length += len;
         data += len;
-    }
+    } //if _currAddr == _prevAddr, do nothing
     _prevAddr = _currAddr;
 
     //End-of-packet flag
