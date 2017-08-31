@@ -22,4 +22,6 @@ int felixTriggerHandler::wait_for_trigger(const int moreinfo)
     {
         usleep(_deadtime);
     }
+
+    return 1;
 }

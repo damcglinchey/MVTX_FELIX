@@ -1,6 +1,9 @@
 #ifndef FLXDEFS_H
 #define FLXDEFS_H
 
+#define IDFELIXV1 98
+#define logDebug(message) std::cout << __FUNCTION__ << " - " << __LINE__ << " : " << message << std::endl
+
 typedef struct chunk_desc
 {
   unsigned int index, length, type;

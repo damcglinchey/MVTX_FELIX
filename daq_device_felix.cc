@@ -16,6 +16,7 @@ daq_device_felix::daq_device_felix(const int eventtype,
     _eventType = eventtype;
     _subEvtID = subeventid;
     _buffer_size = buffer_size;
+    _maxLength = 5000000;
 
     // set the statuss
     _isRunning = false;
@@ -63,8 +64,6 @@ daq_device_felix::~daq_device_felix()
 int daq_device_felix::put_data(const int etype, int* addr, const int length)
 {
     if(etype != _eventType) return 0;  //not our id
-
-    int len = 0;
     sevt = (subevtdata_ptr)addr;
 
     sevt->sub_length = SEVTHEADERLENGTH;
@@ -83,21 +82,18 @@ int daq_device_felix::put_data(const int etype, int* addr, const int length)
 
     if(_currAddr > _prevAddr)
     {
-        len = _currAddr - _prevAddr;
+        uint64_t len = transfer(data, _prevAddr, _currAddr);
         sevt->sub_length += len;
-        memcpy(data, &_dataBuffer[_prevAddr - _startAddr], len);
         data += len;
     }
-    else //wrap arround
+    else //wrap around
     {
-        len = _endAddr - _prevAddr;
+        uint64_t len = transfer(data, _prevAddr, _endAddr);
         sevt->sub_length += len;
-        memcpy(data, &_dataBuffer[_prevAddr - _startAddr], len);
         data += len;
 
-        len = _currAddr - _startAddr;
+        len = transfer(data, _startAddr, _currAddr);
         sevt->sub_length += len;
-        memcpy(data, _dataBuffer, len);
         data += len;
     }
     _prevAddr = _currAddr;
@@ -110,6 +106,16 @@ int daq_device_felix::put_data(const int etype, int* addr, const int length)
     sevt->sub_padding = sevt->sub_length % 4;
     sevt->sub_length += sevt->sub_padding;
     return sevt->sub_length;
+}
+
+uint64_t daq_device_felix::transfer(char* dest, uint64_t headAddr, uint64_t tailAddr)
+{
+    uint64_t startIndex = headAddr - _startAddr;
+    uint64_t len = tailAddr - headAddr;
+    if(len > _maxLength) len = _maxLength;
+
+    memcpy(dest, &_dataBuffer[startIndex], len);
+    return len;
 }
 
 int daq_device_felix::init()
@@ -170,7 +176,7 @@ void daq_device_felix::identify(std::ostream& os) const
 int daq_device_felix::max_length(const int etype) const
 {
     if(etype != _eventType) return 0;
-    return 10000000;
+    return _maxLength;
 }
 
 //------------------- Below are private functions directly taken from fdaq code ------------------
@@ -337,7 +343,7 @@ void daq_device_felix::dmaStop(int dma_index)
     _flx->soft_reset();
 }
 
-std::string daq_device_felix::firmwareVersion()
+std::string daq_device_felix::firmwareVersion() const
 {
     if(_flx == 0) return std::string();
 

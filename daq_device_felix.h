@@ -13,9 +13,6 @@
 #include <flxcard/FlxCard.h>
 #include "flxdefs.h"
 
-#define IDFELIXV1 98
-#define logDebug(message) std::cout << __FUNCTION__ << " - " << __LINE__ << " : " << message << std::endl
-
 class daq_device_felix : public daq_device
 {
 public:
@@ -61,8 +58,11 @@ private:
     //! set fan out
     void setFanOut();
 
+    //! helper function to transfer data
+    uint64_t transfer(char* dest, uint64_t headAddr, uint64_t tailAddr);
+
     //! get the firmware version
-    std::string firmwareVersion();
+    std::string firmwareVersion() const;
 
 protected:
     subevtdata_ptr sevt;
@@ -71,6 +71,7 @@ protected:
     //! event type specification
     int _eventType;
     int _subEvtID;
+    int _maxLength;
 
     //! points to the trigger handler
     felixTriggerHandler* _th;
