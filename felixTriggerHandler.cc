@@ -1,5 +1,6 @@
 #include "felixTriggerHandler.h"
 
+#include <iostream>
 #include <unistd.h>
 
 felixTriggerHandler::felixTriggerHandler(FlxCard* flx, const int deadtime)

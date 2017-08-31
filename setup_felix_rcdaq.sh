@@ -1,6 +1,6 @@
 pkill -9 rcdaq_server
 rcdaq_server > log 2>&1 &
-
+sleep 2
 rcdaq_client load ./librcdaqplugin_felix.so
 
 rcdaq_client create_device device_deadtime 1 1005 1000 0 1

@@ -114,7 +114,7 @@ uint64_t daq_device_felix::transfer(char* dest, uint64_t headAddr, uint64_t tail
     uint64_t len = tailAddr - headAddr;
     if(len > _maxLength) len = _maxLength;
 
-    memcpy(dest, &_dataBuffer[startIndex], len);
+    if(len > 0) memcpy(dest, &_dataBuffer[startIndex], len);
     return len;
 }
 
