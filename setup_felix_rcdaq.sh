@@ -1,3 +1,4 @@
+#!/bin/bash
 pkill -9 rcdaq_server
 rcdaq_server > log 2>&1 &
 sleep 2

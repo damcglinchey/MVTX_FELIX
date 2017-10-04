@@ -80,31 +80,38 @@ int daq_device_felix::put_data(const int etype, int* addr, const int length)
     _currAddr = _dmaStat->current_address;
     while(_currAddr < _startAddr || _currAddr > _endAddr) _currAddr = _dmaStat->current_address;
 
+    int total_transferred_length = 0; //total number of bytes written
     if(_currAddr > _prevAddr)
     {
         uint64_t len = transfer(data, _prevAddr, _currAddr);
-        sevt->sub_length += len;
+        //sevt->sub_length += len;
+        total_transferred_length += len;
         data += len;
     }
     else if(_currAddr < _prevAddr)  //wrap around
     {
         uint64_t len = transfer(data, _prevAddr, _endAddr);
-        sevt->sub_length += len;
+        //sevt->sub_length += len;
+        total_transferred_length += len;
         data += len;
 
         len = transfer(data, _startAddr, _currAddr);
-        sevt->sub_length += len;
+        //sevt->sub_length += len;
+        total_transferred_length += len;
         data += len;
     } //if _currAddr == _prevAddr, do nothing
+    //sevt->sub_length += (total_transferred_length + (4-1))/4+5; // number of 4-byte dwords, rounded up
     _prevAddr = _currAddr;
 
     //End-of-packet flag
     const unsigned int eop_marker = 0xf000f000;
     memcpy(data, &eop_marker, 4);
+    total_transferred_length+=4;
 
-    //packet padding to make packets aligned
-    sevt->sub_padding = sevt->sub_length % 4;
-    sevt->sub_length += sevt->sub_padding;
+    //packet padding to make packets aligned: copied from daq_device_file.cc
+    sevt->sub_padding = total_transferred_length % 16;
+    if ( sevt->sub_padding) sevt->sub_padding = 16 - sevt->sub_padding;
+    sevt->sub_length += (total_transferred_length + sevt->sub_padding)/4;
     return sevt->sub_length;
 }
 
