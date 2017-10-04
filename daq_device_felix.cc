@@ -120,6 +120,9 @@ uint64_t daq_device_felix::transfer(char* dest, uint64_t headAddr, uint64_t tail
 
 int daq_device_felix::init()
 {
+    //start the DMA
+    if(_dataBuffer) this->dmaStart(_cmemPhysAddr, _buffer_size, _dma_index);
+
     //Start the trigger interface if needed
     if(_irqTrigger)
     {
@@ -136,8 +139,6 @@ int daq_device_felix::init()
         startDataEmulator();
     }
 
-    //start the DMA
-    if(_dataBuffer) this->dmaStart(_cmemPhysAddr, _buffer_size, _dma_index);
 
     _isRunning = true;
     _currAddr = _startAddr;
