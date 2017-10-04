@@ -40,3 +40,10 @@ ddump -i rcdaq-00000001-0000.evt -n 30|grep -v 6000 |grep -v "         0        
 
 # todo
 figure out padding in `daq_device_felix.cc` line 111-114
+
+## interrupt stuff
+on plugin side: interrupt is enabled using `_irqTrigger` flag in `daq_device_felix.cc`.
+
+on firmware side: there are 4 user interrupt inputs into wupper
+
+plan: change firmware to assert one of the user interrupts, change plugin so it reads that interrupt instead, get rid of device_deadtime and run with device_felix trigger
